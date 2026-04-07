@@ -17,9 +17,9 @@ RUN pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.deploy.txt && \
     pip install --no-cache-dir \
         dlib-bin==20.0.0 \
-        face-recognition-models==0.3.0 \
         face-recognition==1.3.0 \
-        --no-deps
+        --no-deps && \
+    python -c "import PIL; import dlib; import face_recognition_models; import face_recognition; print('deploy-deps-ok')"
 
 COPY . .
 
