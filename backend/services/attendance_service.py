@@ -1,5 +1,4 @@
 import csv
-from datetime import date, datetime
 from io import StringIO
 from pathlib import Path
 from typing import Any
@@ -7,11 +6,12 @@ from typing import Any
 from flask import current_app
 
 from backend.database import get_db
+from backend.utils.time_utils import current_date_string, current_time_string, current_timestamp_string, local_now
 
 
 def mark_attendance(student_id: int) -> dict[str, Any]:
     connection = get_db()
-    today = date.today().isoformat()
+    today = current_date_string()
 
     existing_record = connection.execute(
         """
@@ -28,12 +28,14 @@ def mark_attendance(student_id: int) -> dict[str, Any]:
     if existing_record:
         return {"status": "already_marked", "record": dict(existing_record)}
 
+    current_time = current_time_string()
+    current_timestamp = current_timestamp_string()
     cursor = connection.execute(
         """
         INSERT INTO attendance (student_id, attendance_date, attendance_time, created_at)
-        VALUES (?, date('now', 'localtime'), time('now', 'localtime'), datetime('now', 'localtime'))
+        VALUES (?, ?, ?, ?)
         """,
-        (student_id,),
+        (student_id, today, current_time, current_timestamp),
     )
     connection.commit()
 
@@ -107,8 +109,10 @@ def get_today_attendance_count() -> int:
         """
         SELECT COUNT(*) AS total
         FROM attendance
-        WHERE attendance_date = date('now', 'localtime')
+        WHERE attendance_date = ?
         """
+    ,
+        (current_date_string(),),
     ).fetchone()
     return int(row["total"])
 
@@ -120,7 +124,7 @@ def export_attendance_to_csv(
     attendance_records = get_attendance_records(selected_date, search_term)
     csv_buffer = StringIO()
     writer = csv.writer(csv_buffer)
-    export_timestamp = datetime.now()
+    export_timestamp = local_now()
     export_date_label = export_timestamp.strftime("%Y-%m-%d")
     export_datetime_label = export_timestamp.strftime("%Y-%m-%d %H:%M:%S")
     attendance_date_label = selected_date or "All Dates"

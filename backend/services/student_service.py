@@ -1,6 +1,7 @@
 from typing import Any
 
 from backend.database import get_db
+from backend.utils.time_utils import current_timestamp_string
 
 
 def create_student(
@@ -11,6 +12,7 @@ def create_student(
     face_image_path: str,
 ) -> dict[str, Any]:
     connection = get_db()
+    current_timestamp = current_timestamp_string()
     cursor = connection.execute(
         """
         INSERT INTO students (
@@ -23,12 +25,18 @@ def create_student(
             updated_at
         )
         VALUES (
-            ?, ?, ?, ?, ?,
-            datetime('now', 'localtime'),
-            datetime('now', 'localtime')
+            ?, ?, ?, ?, ?, ?, ?
         )
         """,
-        (name, roll_number, department, face_encoding, face_image_path),
+        (
+            name,
+            roll_number,
+            department,
+            face_encoding,
+            face_image_path,
+            current_timestamp,
+            current_timestamp,
+        ),
     )
     connection.commit()
 
@@ -76,9 +84,9 @@ def update_student_encoding(student_id: int, face_encoding: str) -> None:
     connection.execute(
         """
         UPDATE students
-        SET face_encoding = ?, updated_at = datetime('now', 'localtime')
+        SET face_encoding = ?, updated_at = ?
         WHERE id = ?
         """,
-        (face_encoding, student_id),
+        (face_encoding, current_timestamp_string(), student_id),
     )
     connection.commit()

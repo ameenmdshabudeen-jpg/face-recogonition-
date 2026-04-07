@@ -4,6 +4,8 @@ from pathlib import Path
 from flask import current_app, g
 from werkzeug.security import generate_password_hash
 
+from backend.utils.time_utils import current_timestamp_string
+
 
 def get_db() -> sqlite3.Connection:
     if "db" not in g:
@@ -39,6 +41,7 @@ def init_db() -> None:
 def seed_default_admin() -> None:
     connection = get_db()
     username = current_app.config["DEFAULT_ADMIN_USERNAME"]
+    current_timestamp = current_timestamp_string()
     existing_admin = connection.execute(
         "SELECT id FROM admins WHERE username = ?",
         (username,),
@@ -50,11 +53,13 @@ def seed_default_admin() -> None:
     connection.execute(
         """
         INSERT INTO admins (username, password_hash, created_at, updated_at)
-        VALUES (?, ?, datetime('now', 'localtime'), datetime('now', 'localtime'))
+        VALUES (?, ?, ?, ?)
         """,
         (
             username,
             generate_password_hash(current_app.config["DEFAULT_ADMIN_PASSWORD"]),
+            current_timestamp,
+            current_timestamp,
         ),
     )
     connection.commit()

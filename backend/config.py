@@ -29,6 +29,7 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
     DEFAULT_ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
     DEFAULT_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "Admin@123")
+    APP_TIMEZONE = os.getenv("APP_TIMEZONE", "Asia/Kolkata")
     FACE_MATCH_TOLERANCE = float(os.getenv("FACE_MATCH_TOLERANCE", "0.48"))
     FRAME_RESIZE_SCALE = float(os.getenv("FRAME_RESIZE_SCALE", "0.25"))
     RECOGNITION_MODEL = os.getenv("RECOGNITION_MODEL", "hog")

@@ -16,6 +16,8 @@ services:
         value: "false"
       - key: SESSION_COOKIE_SECURE
         value: "true"
+      - key: APP_TIMEZONE
+        value: Asia/Kolkata
       - key: APP_DATA_DIR
         value: /var/data/face-attendance
       - key: APP_LOG_DIR

@@ -8,6 +8,7 @@ logs/*.log
 data/*.db
 data/*.db-journal
 data/*.txt
+data/logs/*
 data/known_faces/*
 !data/known_faces/.gitkeep
 data/exports/*.csv

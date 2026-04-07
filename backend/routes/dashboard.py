@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import date
 from pathlib import Path
 
 from flask import (
@@ -23,6 +22,7 @@ from backend.services.attendance_service import (
 )
 from backend.services.face_service import get_face_service
 from backend.services.student_service import create_student, get_student_count, list_students
+from backend.utils.time_utils import local_now
 from backend.utils.decorators import login_required
 
 
@@ -53,7 +53,7 @@ def dashboard():
         attendance_records=get_attendance_records(selected_date, search_term),
         recent_attendance=get_recent_attendance(),
         recent_students=list_students(limit=6),
-        today_label=date.today().strftime("%d %b %Y"),
+        today_label=local_now().strftime("%d %b %Y"),
     )
 
 

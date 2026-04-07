@@ -5,4 +5,5 @@ opencv-python-headless==4.10.0.84
 Pillow==12.2.0
 face-recognition-models==0.3.0
 setuptools==70.3.0
+tzdata==2025.2
 waitress==3.0.0
