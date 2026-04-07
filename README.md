@@ -121,6 +121,8 @@ This repo now includes:
 - [render.yaml](./render.yaml)
 - [requirements.deploy.txt](./requirements.deploy.txt)
 
+The Docker deployment intentionally installs `dlib-bin` instead of compiling `dlib` from source, because source builds can exceed low-memory build limits on free hosting tiers.
+
 Render deployment steps:
 
 1. Push this project to GitHub.

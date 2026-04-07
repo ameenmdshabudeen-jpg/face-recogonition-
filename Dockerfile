@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -8,16 +8,18 @@ ENV APP_LOG_DIR=/var/data/face-attendance/logs
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.deploy.txt ./
 
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.deploy.txt
+    pip install --no-cache-dir -r requirements.deploy.txt && \
+    pip install --no-cache-dir \
+        dlib-bin==20.0.0 \
+        face-recognition-models==0.3.0 \
+        face-recognition==1.3.0 \
+        --no-deps
 
 COPY . .
 
