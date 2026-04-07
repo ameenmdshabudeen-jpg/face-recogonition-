@@ -11,14 +11,16 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 class Config:
     BASE_DIR = PROJECT_ROOT
+    DATA_DIR = Path(os.getenv("APP_DATA_DIR", str(BASE_DIR / "data"))).resolve()
+    LOG_DIR = Path(os.getenv("APP_LOG_DIR", str(DATA_DIR / "logs"))).resolve()
     SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
     DEBUG = os.getenv("FLASK_DEBUG", "false").lower() == "true"
     PROJECT_ROOT = str(BASE_DIR)
-    DATABASE_PATH = str(BASE_DIR / "data" / "attendance.db")
+    DATABASE_PATH = str(DATA_DIR / "attendance.db")
     SCHEMA_PATH = str(BASE_DIR / "database" / "schema.sql")
-    FACE_IMAGE_DIR = str(BASE_DIR / "data" / "known_faces")
-    EXPORT_DIR = str(BASE_DIR / "data" / "exports")
-    LOG_FILE = str(BASE_DIR / "logs" / "attendance.log")
+    FACE_IMAGE_DIR = str(DATA_DIR / "known_faces")
+    EXPORT_DIR = str(DATA_DIR / "exports")
+    LOG_FILE = str(LOG_DIR / "attendance.log")
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: face-recognition-attendance
+    env: docker
+    plan: starter
+    autoDeploy: true
+    healthCheckPath: /health
+    disk:
+      name: face-recognition-data
+      mountPath: /var/data/face-attendance
+      sizeGB: 1
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: APP_DATA_DIR
+        value: /var/data/face-attendance
+      - key: APP_LOG_DIR
+        value: /var/data/face-attendance/logs

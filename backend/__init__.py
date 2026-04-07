@@ -27,6 +27,10 @@ def create_app() -> Flask:
     with app.app_context():
         get_face_service().load_known_faces()
 
+    @app.get("/health")
+    def health():
+        return {"status": "ok"}, 200
+
     @app.errorhandler(404)
     def not_found(_error):
         return (

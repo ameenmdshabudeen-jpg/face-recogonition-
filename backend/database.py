@@ -61,6 +61,7 @@ def seed_default_admin() -> None:
 
 
 def init_app(app) -> None:
+    Path(app.config["DATABASE_PATH"]).parent.mkdir(parents=True, exist_ok=True)
     Path(app.config["FACE_IMAGE_DIR"]).mkdir(parents=True, exist_ok=True)
     Path(app.config["EXPORT_DIR"]).mkdir(parents=True, exist_ok=True)
     Path(app.config["LOG_FILE"]).parent.mkdir(parents=True, exist_ok=True)
