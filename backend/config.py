@@ -11,16 +11,18 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 class Config:
     BASE_DIR = PROJECT_ROOT
-    DATA_DIR = Path(os.getenv("APP_DATA_DIR", str(BASE_DIR / "data"))).resolve()
-    LOG_DIR = Path(os.getenv("APP_LOG_DIR", str(DATA_DIR / "logs"))).resolve()
+    DATA_ROOT = Path(os.getenv("APP_DATA_DIR", str(BASE_DIR / "data"))).resolve()
+    LOG_ROOT = Path(os.getenv("APP_LOG_DIR", str(DATA_ROOT / "logs"))).resolve()
     SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
     DEBUG = os.getenv("FLASK_DEBUG", "false").lower() == "true"
     PROJECT_ROOT = str(BASE_DIR)
-    DATABASE_PATH = str(DATA_DIR / "attendance.db")
+    DATA_DIR = str(DATA_ROOT)
+    LOG_DIR = str(LOG_ROOT)
+    DATABASE_PATH = str(DATA_ROOT / "attendance.db")
     SCHEMA_PATH = str(BASE_DIR / "database" / "schema.sql")
-    FACE_IMAGE_DIR = str(DATA_DIR / "known_faces")
-    EXPORT_DIR = str(DATA_DIR / "exports")
-    LOG_FILE = str(LOG_DIR / "attendance.log")
+    FACE_IMAGE_DIR = str(DATA_ROOT / "known_faces")
+    EXPORT_DIR = str(DATA_ROOT / "exports")
+    LOG_FILE = str(LOG_ROOT / "attendance.log")
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"

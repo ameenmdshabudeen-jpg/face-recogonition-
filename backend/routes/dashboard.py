@@ -107,7 +107,7 @@ def register_student():
         )
     except sqlite3.IntegrityError:
         if saved_image_path:
-            image_path = Path(current_app.config["PROJECT_ROOT"]) / saved_image_path
+            image_path = face_service.resolve_storage_path(saved_image_path)
             if image_path.exists():
                 image_path.unlink()
         return jsonify({"error": "That roll number is already registered."}), 409
@@ -115,7 +115,7 @@ def register_student():
         return jsonify({"error": str(exc)}), 400
     except Exception:
         if saved_image_path:
-            image_path = Path(current_app.config["PROJECT_ROOT"]) / saved_image_path
+            image_path = face_service.resolve_storage_path(saved_image_path)
             if image_path.exists():
                 image_path.unlink()
         current_app.logger.exception("Student registration failed.")

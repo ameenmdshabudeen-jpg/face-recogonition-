@@ -76,8 +76,8 @@ class FaceService:
         if not cv2.imwrite(str(file_path), image_bgr):
             raise ValueError("Unable to save the captured face image to disk.")
 
-        project_root = Path(current_app.config["PROJECT_ROOT"])
-        return file_path.relative_to(project_root).as_posix()
+        data_dir = Path(current_app.config["DATA_DIR"])
+        return file_path.relative_to(data_dir).as_posix()
 
     def load_known_faces(self) -> None:
         rows = get_db().execute(
@@ -175,7 +175,7 @@ class FaceService:
         skipped: list[str] = []
 
         for student in students:
-            image_path = self._resolve_relative_path(student["face_image_path"])
+            image_path = self.resolve_storage_path(student["face_image_path"])
             image_bgr = cv2.imread(str(image_path))
 
             if image_bgr is None:
@@ -210,8 +210,20 @@ class FaceService:
     def get_known_face_count(self) -> int:
         return len(self.known_faces)
 
-    def _resolve_relative_path(self, relative_path: str) -> Path:
-        return Path(current_app.config["PROJECT_ROOT"]) / relative_path
+    def resolve_storage_path(self, stored_path: str) -> Path:
+        candidate = Path(stored_path)
+
+        if candidate.is_absolute():
+            return candidate
+
+        data_dir = Path(current_app.config["DATA_DIR"])
+        data_path = data_dir / candidate
+        if data_path.exists():
+            return data_path
+
+        # Backward compatibility for records created before external data directories were introduced.
+        project_root = Path(current_app.config["PROJECT_ROOT"])
+        return project_root / candidate
 
     def _scale_location(
         self,
