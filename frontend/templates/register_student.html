@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Register Student | Face Recognition Attendance{% endblock %}
+
+{% block content %}
+<section class="page-intro">
+    <div>
+        <p class="eyebrow">Student Enrollment</p>
+        <h2>Register a New Student</h2>
+        <p class="muted-text">
+            Capture one clear face from the webcam. The system stores the face encoding and the source image.
+        </p>
+    </div>
+    <a href="{{ url_for('dashboard.dashboard') }}" class="ghost-button">Back to Dashboard</a>
+</section>
+
+<section class="capture-grid">
+    <div class="glass-card">
+        <form id="register-form" class="stacked-form" novalidate>
+            <label>
+                Student Name
+                <input type="text" id="student-name" name="name" placeholder="Enter full name" required>
+            </label>
+
+            <label>
+                Roll Number
+                <input type="text" id="student-roll-number" name="roll_number" placeholder="Example: CSE2026001" required>
+            </label>
+
+            <label>
+                Department
+                <input type="text" id="student-department" name="department" placeholder="Example: Computer Science" required>
+            </label>
+
+            <input type="hidden" id="face-image" name="face_image">
+
+            <div class="button-row">
+                <button type="button" id="capture-button" class="secondary-button">Capture Face</button>
+                <button type="submit" id="register-button" class="primary-button">Save Student</button>
+            </div>
+        </form>
+
+        <div id="register-status" class="inline-status info">
+            Camera is starting. Allow browser permission when prompted.
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <p class="eyebrow">Webcam Preview</p>
+        <h3>Capture Guidelines</h3>
+        <div class="video-shell">
+            <video id="registration-video" autoplay playsinline muted></video>
+            <canvas id="registration-canvas" hidden></canvas>
+        </div>
+        <img id="capture-preview" class="capture-preview hidden" alt="Captured face preview">
+        <ul class="feature-list compact-list">
+            <li>Keep only one face inside the frame.</li>
+            <li>Make sure the image is bright and front-facing.</li>
+            <li>Recapture if the face looks blurry or cut off.</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

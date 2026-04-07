@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Face Recognition Attendance System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand-block">
+            <div class="brand-badge">FR</div>
+            <div>
+                <p class="eyebrow">College Attendance Suite</p>
+                <h1>Face Recognition Attendance System</h1>
+            </div>
+        </div>
+
+        {% if session.get("admin_id") %}
+        <nav class="site-nav">
+            <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('dashboard.register_student_page') }}">Register Student</a>
+            <a href="{{ url_for('recognition.recognize_page') }}">Live Recognition</a>
+            <form action="{{ url_for('auth.logout') }}" method="post" class="inline-form">
+                <button type="submit" class="ghost-button">Logout</button>
+            </form>
+        </nav>
+        {% endif %}
+    </header>
+
+    <main class="page-shell">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="flash-stack">
+                    {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Built with Flask, OpenCV, face_recognition, and SQLite.</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

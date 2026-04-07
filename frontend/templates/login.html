@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login | Face Recognition Attendance{% endblock %}
+
+{% block content %}
+<section class="login-grid">
+    <div class="glass-card">
+        <p class="eyebrow">Secure Access</p>
+        <h2>Admin Login</h2>
+        <p class="muted-text">
+            Sign in to register students, run live recognition, and manage attendance exports.
+        </p>
+
+        <form method="post" class="stacked-form">
+            <label>
+                Username
+                <input type="text" name="username" placeholder="Enter admin username" required>
+            </label>
+
+            <label>
+                Password
+                <input type="password" name="password" placeholder="Enter password" required>
+            </label>
+
+            <button type="submit" class="primary-button">Sign In</button>
+        </form>
+    </div>
+
+    <div class="feature-card">
+        <p class="eyebrow">Included Features</p>
+        <h2>What this system does</h2>
+        <ul class="feature-list">
+            <li>Registers students with webcam-based face capture.</li>
+            <li>Stores face encodings inside SQLite for quick lookups.</li>
+            <li>Recognizes multiple faces in real time from the browser camera feed.</li>
+            <li>Marks attendance automatically and blocks duplicates for the same day.</li>
+            <li>Exports attendance history to CSV for reporting.</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

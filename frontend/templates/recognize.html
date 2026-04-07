@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Live Recognition | Face Recognition Attendance{% endblock %}
+
+{% block content %}
+<section class="page-intro">
+    <div>
+        <p class="eyebrow">Recognition Mode</p>
+        <h2>Live Attendance Scanner</h2>
+        <p class="muted-text">
+            The browser captures frames, the backend recognizes faces, and attendance is marked automatically.
+        </p>
+    </div>
+    <a href="{{ url_for('dashboard.dashboard') }}" class="ghost-button">Back to Dashboard</a>
+</section>
+
+<section class="recognition-grid">
+    <div class="glass-card">
+        <div class="button-row">
+            <button type="button" id="start-scan-button" class="primary-button">Start Scanning</button>
+            <button type="button" id="stop-scan-button" class="ghost-button">Stop Scanning</button>
+        </div>
+
+        <div class="video-shell recognition-shell">
+            <video id="recognition-video" autoplay playsinline muted></video>
+            <canvas id="overlay-canvas"></canvas>
+            <canvas id="frame-canvas" hidden></canvas>
+        </div>
+
+        <div id="recognition-status" class="inline-status info">
+            Camera is starting. Allow browser permission when prompted.
+        </div>
+    </div>
+
+    <div class="side-column">
+        <div class="glass-card">
+            <p class="eyebrow">Detected Faces</p>
+            <h3>Current Frame</h3>
+            <div id="recognition-results" class="result-list">
+                <div class="result-card placeholder-card">
+                    Waiting for the first processed frame.
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <p class="eyebrow">Attendance Updates</p>
+            <h3>Newly Marked Entries</h3>
+            <div id="attendance-events" class="result-list">
+                <div class="result-card placeholder-card">
+                    Attendance confirmations will appear here.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/recognize.js') }}"></script>
+{% endblock %}

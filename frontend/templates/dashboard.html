@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Face Recognition Attendance{% endblock %}
+
+{% block content %}
+<section class="hero-panel">
+    <div>
+        <p class="eyebrow">Admin Dashboard</p>
+        <h2>Attendance Overview</h2>
+        <p class="muted-text">
+            Monitor registrations, watch recognition performance, and export verified records.
+        </p>
+    </div>
+
+    <div class="hero-actions">
+        <a href="{{ url_for('dashboard.register_student_page') }}" class="primary-button">Register Student</a>
+        <a href="{{ url_for('recognition.recognize_page') }}" class="secondary-button">Start Live Recognition</a>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span class="stat-label">Registered Students</span>
+        <strong class="stat-value">{{ student_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Attendance Today</span>
+        <strong class="stat-value">{{ today_count }}</strong>
+        <span class="stat-helper">{{ today_label }}</span>
+    </article>
+    <article class="stat-card">
+        <span class="stat-label">Cached Face Profiles</span>
+        <strong class="stat-value">{{ known_face_count }}</strong>
+    </article>
+</section>
+
+<section class="content-grid">
+    <div class="glass-card wide-card">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Attendance Records</p>
+                <h3>Search and Export</h3>
+            </div>
+
+            <div class="table-actions">
+                <a
+                    href="{{ url_for('dashboard.export_attendance', date=selected_date, search=search_term) }}"
+                    class="secondary-button"
+                >
+                    Export CSV
+                </a>
+                <form id="retrain-form" action="{{ url_for('dashboard.retrain_faces') }}" method="post" class="inline-form">
+                    <button type="submit" class="ghost-button">Retrain Faces</button>
+                </form>
+            </div>
+        </div>
+
+        <form method="get" class="filter-grid">
+            <label>
+                Search
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Name, roll number, department"
+                    value="{{ search_term }}"
+                >
+            </label>
+            <label>
+                Date
+                <input type="date" name="date" value="{{ selected_date }}">
+            </label>
+            <div class="filter-actions">
+                <button type="submit" class="primary-button">Apply Filters</button>
+                <a href="{{ url_for('dashboard.dashboard') }}" class="ghost-button">Reset</a>
+            </div>
+        </form>
+
+        <div class="table-shell">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Roll Number</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.roll_number }}</td>
+                        <td>{{ record.department }}</td>
+                        <td>{{ record.attendance_date }}</td>
+                        <td>{{ record.attendance_time }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="empty-state">No attendance records found for the selected filters.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <aside class="side-column">
+        <div class="glass-card">
+            <p class="eyebrow">Recent Attendance</p>
+            <h3>Latest Check-ins</h3>
+            <ul class="activity-list">
+                {% for record in recent_attendance %}
+                <li>
+                    <strong>{{ record.name }}</strong>
+                    <span>{{ record.roll_number }} - {{ record.attendance_date }} {{ record.attendance_time }}</span>
+                </li>
+                {% else %}
+                <li>
+                    <strong>No records yet</strong>
+                    <span>Attendance entries will appear here after the first recognition.</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="glass-card">
+            <p class="eyebrow">Latest Students</p>
+            <h3>Recently Registered</h3>
+            <ul class="activity-list">
+                {% for student in recent_students %}
+                <li>
+                    <strong>{{ student.name }}</strong>
+                    <span>{{ student.roll_number }} - {{ student.department }}</span>
+                </li>
+                {% else %}
+                <li>
+                    <strong>No students registered</strong>
+                    <span>Use the register page to add the first student profile.</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
